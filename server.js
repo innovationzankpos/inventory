@@ -287,23 +287,22 @@ app.post("/login", async (req, res) => {
 
     const { username, password } = req.body;
 
-    // const uname = String(username).toLowerCase();
-    // const passw = String(password).toLowerCase();
-
     var x = 0;
     var letter = "";
 
-    while (x < password.length) {
-      var n = password.charCodeAt(x) + (x + 1);
-      letter = letter + String.fromCharCode(n);
-      x++;
+    if (password.length != 0) {
+      while (x < password.length) {
+        var n = password.charCodeAt(x) + (x + 1);
+        letter = letter + String.fromCharCode(n);
+        x++;
+      }
     }
 
     const check_credentials = await sql.query(
       `SELECT * from [POWERPOS].[dbo].[user_access] where user_id = '${username}' AND user_password = '${letter}'`
     );
 
-    // console.log("Letter: " + letter);
+    console.log("Letter: " + letter);
 
     if (check_credentials.recordset.length === 0) {
       return res.sendStatus(403);
