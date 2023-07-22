@@ -380,7 +380,7 @@
       fetch("/logout")
         .then((response) => response.json())
         .then((data) => {
-          alert(data.message);
+          // alert(data.message);
           window.location.href = "/";
         })
         .catch((error) => {
