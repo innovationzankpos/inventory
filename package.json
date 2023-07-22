@@ -1,0 +1,34 @@
+{
+  "name": "pos-login",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "devStart": "nodemon server.js",
+    "pkg": "pkg ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "pkg": {
+    "assets": [
+      ".env",
+      "public/**/*"
+    ]
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.1",
+    "msnodesqlv8": "^4.1.0",
+    "mssql": "^9.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "pkg": "^5.8.1"
+  },
+  "bin": {
+    "posweb": "server.js"
+  }
+}

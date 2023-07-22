@@ -1,0 +1,198 @@
+<html>
+  <head>
+    <title>POS LOG IN</title>
+    <link
+      rel="icon"
+      type="image/png"
+      size="16x16"
+      href="../images/card-payment_4975788.png"
+    />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
+    <!-- <link rel="stylesheet" href="../styles/style.css" /> -->
+    <style>
+      .main {
+        /* border: 5px solid darkslategray; */
+        border-radius: 20px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 15px;
+        /* background-color: #955251; */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .form-title {
+        text-align: center;
+        /* color: white; */
+        letter-spacing: 5px;
+        font-size: 20px;
+      }
+
+      .login-form div {
+        margin-top: 10px;
+      }
+
+      input,
+      select {
+        /* width: 300px; */
+        border-radius: 10px;
+        padding: 15px;
+        font-size: 20px;
+        border: 0.5px solid gray;
+      }
+
+      select {
+        width: 100%;
+      }
+
+      .loginBtn {
+        width: 100%;
+        background-color: aquamarine;
+        /* background-color: aquamarine; */
+        border: 3px solid black;
+        font-weight: bold;
+      }
+
+      .loginBtn:hover {
+        cursor: pointer;
+        background-color: aqua;
+      }
+    </style>
+    <script>
+      console.log("History length: " + history.length);
+    </script>
+  </head>
+  <!-- style="background-color: #dfcfbe" -->
+  <body>
+    <div class="main">
+      <div class="form-title"><h1>POS LOGIN</h1></div>
+      <img
+        src="../images/human.png"
+        alt="User Image"
+        title="User Image"
+        style="
+          width: 120px;
+          height: 120px;
+          margin-bottom: 15px;
+          border-radius: 10px;
+        "
+      />
+      <form class="login-form">
+        <div>
+          <!-- <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder="Username"
+            autocomplete="off"
+            autofocus
+            required
+          /> -->
+          <select id="username" autofocus required>
+            <option value="" disabled selected>Select Username:</option>
+          </select>
+        </div>
+        <div>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Password"
+            required
+          />
+        </div>
+        <div>
+          <input type="button" class="loginBtn" id="login" value="LOG IN" />
+        </div>
+      </form>
+    </div>
+  </body>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    const inputFields = document.querySelectorAll("input");
+
+    Array.from(inputFields).forEach((input) => {
+      input.addEventListener("keypress", (event) => {
+        const hey = input.getAttribute("id");
+        if (event.key === "Enter") {
+          if (hey == "username" || hey == "password") {
+            event.preventDefault();
+            document.getElementById("login").click();
+          }
+        }
+      });
+    });
+
+    document
+      .getElementById("username")
+      .addEventListener("load", loadUsernames());
+
+    function loadUsernames() {
+      fetch("/getUsers")
+        .then((response) => response.json())
+        .then((data) => {
+          data.forEach((row) => {
+            // create option using DOM
+            const newOption = document.createElement("option");
+            const optionText = document.createTextNode(
+              `${row.user_id.toString().toUpperCase()}`
+            );
+            // set option text
+            newOption.appendChild(optionText);
+            // and option value
+            newOption.setAttribute("value", `${row.user_id}`);
+
+            const select = document.getElementById("username");
+            select.appendChild(newOption);
+
+            // select.addEventListener("change", function () {
+            //   select.style.color = "white";
+            // });
+          });
+        })
+        .catch((error) => console.error(error));
+    }
+
+    $("#login").click(function () {
+      if ($(".login-form")[0].checkValidity()) {
+        var userData = {
+          username: $("#username").val(),
+          password: $("#password").val(),
+        };
+
+        $.ajax({
+          url: "/login",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify(userData),
+          success: function (response) {
+            // const user = response.user;
+            const msg = response.message;
+            alert(msg);
+            history.replaceState(null, "", "/dashboard");
+            location.href = "/dashboard";
+
+            clearForm();
+          },
+          error: function (xhr, status, error) {
+            alert("Wrong Credentials!");
+            console.error("Error logging in!", error);
+            location.reload();
+          },
+        });
+      } else {
+        // alert("Please fill up the fields!");
+        $(".login-form")[0].reportValidity();
+      }
+    });
+
+    function clearForm() {
+      $("#username").val("");
+      $("#password").val("");
+    }
+  </script>
+</html>

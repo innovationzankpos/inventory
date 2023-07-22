@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - codingnepalweb.com -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>POS WEB Branch Inventory</title>
+    <!-- CSS -->
+    <!-- <link rel="stylesheet" href="css/style.css" /> -->
+    <!-- Boxicons CSS -->
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* Google Fonts - Poppins */
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      body {
+        min-height: 100%;
+        background: #e3f2fd;
+      }
+      nav {
+        /* position: fixed; */
+        top: 0;
+        left: 0;
+        height: 70px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        background: #fff;
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+      }
+      nav .logo {
+        display: flex;
+        align-items: center;
+        margin: 0 24px;
+      }
+      .logo .menu-icon {
+        color: #333;
+        font-size: 24px;
+        margin-right: 14px;
+        cursor: pointer;
+      }
+      .logo .logo-name {
+        color: #333;
+        font-size: 20px;
+        font-weight: 500;
+      }
+      nav .sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        height: 100%;
+        width: 260px;
+        padding: 20px 0;
+        background-color: #fff;
+        box-shadow: 0 5px 1px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s ease;
+      }
+      nav.open .sidebar {
+        left: 0;
+      }
+      .sidebar .sidebar-content {
+        display: flex;
+        height: 100%;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 30px 16px;
+      }
+      .sidebar-content .list {
+        list-style: none;
+        cursor: pointer;
+      }
+      .list .nav-link {
+        display: flex;
+        align-items: center;
+        margin: 8px 0;
+        padding: 14px 12px;
+        border-radius: 8px;
+        text-decoration: none;
+      }
+      .lists .nav-link:hover {
+        background-color: #4070f4;
+      }
+      .nav-link .icon {
+        margin-right: 14px;
+        font-size: 20px;
+        color: #707070;
+      }
+      .nav-link .link {
+        font-size: 16px;
+        color: #707070;
+        font-weight: 400;
+      }
+      .lists .nav-link:hover .icon,
+      .lists .nav-link:hover .link {
+        color: #fff;
+      }
+      .inventory-content {
+        /* height: 859px;
+        width: 100%; */
+        /* background-color: darkslategray; */
+        display: flex;
+        /* align-items: center; */
+        justify-content: center;
+      }
+      .table-div {
+        /* width: 50%;
+        height: 80%; */
+        margin: 100px;
+      }
+      table {
+        width: 100%;
+        /* height: 100%; */
+        text-align: center;
+        position: relative;
+        border-collapse: collapse;
+        background-color: #f6f6f6;
+      } /* Spacing */
+      td,
+      th {
+        border: 1px solid #999;
+        padding: 20px;
+        font-weight: 600;
+      }
+      th {
+        background: brown;
+        color: white;
+        border-radius: 0;
+        position: sticky;
+        top: 0;
+        padding: 10px;
+      }
+      .primary {
+        background-color: #000000;
+      }
+      /* tbody > tr:hover {
+        background-color: #ffc107;
+        background-color: skyblue;
+      } */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        height: 1000vh;
+        width: 200%;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.4s ease;
+        background: rgba(0, 0, 0, 0.3);
+      }
+      nav.open ~ .overlay {
+        opacity: 1;
+        left: 260px;
+        pointer-events: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="logo">
+        <i class="bx bx-menu menu-icon"></i>
+        <span class="logo-name">Branch Inventory</span>
+      </div>
+      <div class="sidebar">
+        <div class="logo">
+          <i class="bx bx-menu menu-icon"></i>
+          <span class="logo-name" id="username">USERNAME</span>
+        </div>
+
+        <div class="sidebar-content">
+          <ul class="lists">
+            <li class="list">
+              <a href="/dashboard" class="nav-link">
+                <i class="bx bx-home-alt icon"></i>
+                <span class="link">Dashboard</span>
+              </a>
+            </li>
+            <li class="list">
+              <a href="/branchinv" class="nav-link">
+                <i class="bx bx-bar-chart-alt-2 icon"></i>
+                <span class="link">Branch Inventory</span>
+              </a>
+            </li>
+            <li class="list">
+              <a href="summaryinv" class="nav-link">
+                <i class="bx bx-bar-chart-alt-2 icon"></i>
+                <span class="link">Summary Inventory</span>
+              </a>
+            </li>
+            <!-- <li class="list">
+              <a href="#" class="nav-link">
+                <i class="bx bx-message-rounded icon"></i>
+                <span class="link">Messages</span>
+              </a>
+            </li>
+            <li class="list">
+              <a href="#" class="nav-link">
+                <i class="bx bx-pie-chart-alt-2 icon"></i>
+                <span class="link">Analytics</span>
+              </a>
+            </li>
+            <li class="list">
+              <a href="#" class="nav-link">
+                <i class="bx bx-heart icon"></i>
+                <span class="link">Likes</span>
+              </a>
+            </li>
+            <li class="list">
+              <a href="#" class="nav-link">
+                <i class="bx bx-folder-open icon"></i>
+                <span class="link">Files</span>
+              </a>
+            </li> -->
+          </ul>
+
+          <!-- class="bottom-cotent" -->
+          <div class="lists">
+            <li class="list">
+              <a href="#" class="nav-link">
+                <i class="bx bx-cog icon"></i>
+                <span class="link">Settings</span>
+              </a>
+            </li>
+            <li class="list">
+              <a onclick="logOut()" class="nav-link">
+                <i class="bx bx-log-out icon"></i>
+                <span class="link">Logout</span>
+              </a>
+            </li>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="inventory-content">
+      <div class="table-div">
+        <div style="display: flex; padding: 10px">
+          <h2 style="margin-right: 10px">Filter by Branch:</h2>
+          <select
+            id="filterCol"
+            style="
+              padding: 8px;
+              border-radius: 4px;
+              width: 9vw;
+              font-size: 18px;
+              border: 1px solid rgb(120, 120, 120);
+            "
+            onchange="filterBranch()"
+          >
+            <!-- <option value="001">001</option>
+            <option value="002">002</option> -->
+          </select>
+        </div>
+        <table>
+          <thead id="table-head">
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">ITEMCODE</th>
+              <th scope="col">ITEMNAME</th>
+              <th scope="col">BEGINNING</th>
+              <th scope="col">DELIVERY</th>
+              <th scope="col">SALES</th>
+              <th scope="col">PULLOUT</th>
+              <th scope="col">ENDING INVENTORY</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+          <!-- <tfoot>
+            <tr>
+              <th>Total Courses</th>
+              <td colspan="4">
+                <i>What are you waiting for? Get Started now for free</i>
+              </td>
+            </tr>
+          </tfoot> -->
+        </table>
+      </div>
+    </div>
+
+    <section class="overlay"></section>
+  </body>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    const navBar = document.querySelector("nav"),
+      menuBtns = document.querySelectorAll(".menu-icon"),
+      overlay = document.querySelector(".overlay");
+
+    menuBtns.forEach((menuBtn) => {
+      menuBtn.addEventListener("click", () => {
+        navBar.classList.toggle("open");
+      });
+    });
+
+    overlay.addEventListener("click", () => {
+      navBar.classList.remove("open");
+    });
+
+    document
+      .getElementById("username")
+      .addEventListener("load", showUsername());
+
+    function showUsername() {
+      fetch("/user")
+        .then((response) => response.json())
+        .then((data) => {
+          data.forEach((row) => {
+            document.getElementById("username").innerHTML =
+              "Welcome, " + row.user_id + "!";
+
+            showData();
+          });
+        })
+        .catch((error) => console.error(error));
+    }
+
+    function showData() {
+      // const tableHeader = document.querySelector("#table-head");
+      // tableHeader.innerHTML = "";
+
+      // const newHeader = tableHeader.insertRow();
+      // newHeader.innerHTML = `<th>ID</th><th>ITEMCODE</th><th>ITEMNAME</th><th>ENDING INVENTORY</th><th>SALES</th>`;
+
+      const b = "001";
+      createRow(b);
+    }
+
+    document
+      .getElementById("filterCol")
+      .addEventListener("load", loadBranches());
+
+    function loadBranches() {
+      fetch("/getBranch")
+        .then((response) => response.json())
+        .then((data) => {
+          data.forEach((row) => {
+            // create option using DOM
+            const newOption = document.createElement("option");
+            const optionText = document.createTextNode(
+              `${row.machine_id.toString().toUpperCase()}`
+            );
+            // set option text
+            newOption.appendChild(optionText);
+            // and option value
+            newOption.setAttribute("value", `${row.machine_id}`);
+
+            const select = document.getElementById("filterCol");
+            select.appendChild(newOption);
+
+            // select.addEventListener("change", function () {
+            //   select.style.color = "white";
+            // });
+          });
+        })
+        .catch((error) => console.error(error));
+    }
+
+    // function showData2() {
+    //   let setRow = "";
+    //   fetch("/suminvcolumn")
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       let headers = [];
+    //       data.forEach((row) => {
+    //         headers.push(row.COLUMN_NAME);
+    //       });
+
+    //       for (let i = 0; i < headers.length; i++) {
+    //         const header = String(headers[i]);
+    //         console.log(header);
+
+    //         if (header in ["itemcode", "itemname"]) {
+    //           setRow = setRow + "<td>" + header + "</td>";
+    //         }
+    //       }
+
+    //       console.log("Setting Row:" + setRow);
+    //     })
+    //     .catch((error) => console.error(error));
+    // }
+
+    function filterBranch() {
+      fetch("/suminv")
+        .then((response) => response.json())
+        .then((data) => {
+          // const tableHeader = document.querySelector("#table-head");
+          const tableBody = document.querySelector("#table-body");
+          // tableHeader.innerHTML = "";
+          tableBody.innerHTML = "";
+          data.forEach((row, index) => {
+            // const newHeader = tableHeader.insertRow();
+            const newRow = tableBody.insertRow();
+            if (document.getElementById("filterCol").value) {
+              createRow(document.getElementById("filterCol").value);
+            }
+          });
+
+          document.getElementById("filterCol").blur();
+        })
+        .catch((error) => console.error(error));
+    }
+
+    function createRow(branch) {
+      fetch("/suminv")
+        .then((response) => response.json())
+        .then((data) => {
+          const data_size = Object.keys(data).length;
+          const tableBody = document.querySelector("#table-body");
+          tableBody.innerHTML = "";
+
+          const newRow = tableBody.insertRow();
+
+          if (data_size == 0) {
+            newRow.innerHTML = `<td colspan='5'>NO DATA FOUND!</td>`;
+            document.getElementById("filterCol").disabled = true;
+          } else {
+            document.getElementById("filterCol").disabled = false;
+
+            data.forEach((row, index) => {
+              newRow.innerHTML = `<td>${index + 1}</td><td>${
+                row.itemcode
+              }</td><td>${row.itemname}</td><td>${row["B" + branch]}</td><td>${
+                row["D" + branch]
+              }</td><td>${row["S" + branch]}</td><td>${
+                row["P" + branch]
+              }</td><td>${row[branch]}</td>`;
+            });
+          }
+        })
+        .catch((error) => console.error(error));
+    }
+
+    function logOut() {
+      history.replaceState(null, "", "/");
+      fetch("/logout")
+        .then((response) => response.json())
+        .then((data) => {
+          alert(data.message);
+          window.location.href = "/";
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+
+    // showUsername();
+  </script>
+</html>
